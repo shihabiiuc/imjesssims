@@ -1,8 +1,6 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import { getImage } from "astro:assets";
 
-// Import all gallery images
 import g1 from "../assets/gallery/137069597_1298068633898669_6395820760268769084_n.jpg";
 import g2 from "../assets/gallery/173176212_1363881200650745_5892447380394473728_n.jpg";
 import g3 from "../assets/gallery/178362286_1371610129877852_8128462508646759319_n.jpg";
@@ -33,7 +31,7 @@ const images = [g1, g2, g3, g4, g5, g6, g7, g8, g9, g10, g11];
     <div class="gal-grid" id="gallery-grid">
       {
         images.map((img, i) => (
-          <div class="gal-grid__item" data-index={i}>
+          <div class="gal-grid__item">
             <button
               class="gal-grid__btn"
               aria-label={`Open image ${i + 1}`}
@@ -56,110 +54,285 @@ const images = [g1, g2, g3, g4, g5, g6, g7, g8, g9, g10, g11];
       }
     </div>
   </section>
-
-  <!-- Lightbox -->
-  <div
-    class="lightbox"
-    id="lightbox"
-    role="dialog"
-    aria-modal="true"
-    aria-label="Image viewer"
-    hidden
-  >
-    <button class="lightbox__close" id="lb-close" aria-label="Close">✕</button>
-    <button
-      class="lightbox__nav lightbox__nav--prev"
-      id="lb-prev"
-      aria-label="Previous image">‹</button
-    >
-    <button
-      class="lightbox__nav lightbox__nav--next"
-      id="lb-next"
-      aria-label="Next image">›</button
-    >
-    <div class="lightbox__stage">
-      <img class="lightbox__img" id="lb-img" src="" alt="" />
-    </div>
-    <div class="lightbox__counter" id="lb-counter"></div>
-  </div>
 </Layout>
 
 <script>
-  // Collect all image srcs from the buttons
-  const btns = Array.from(
-    document.querySelectorAll<HTMLButtonElement>(".gal-grid__btn"),
-  );
-  const srcs = btns.map((b) => b.dataset.src!);
+  // ── Lightbox singleton ──────────────────────────────────────────────────────
+  // We create ONE lightbox element and append it directly to <body>.
+  // This keeps it completely outside any view-transition stacking context,
+  // which is what causes position:fixed to break and the page to scroll down.
 
-  const lightbox = document.getElementById("lightbox")!;
-  const lbImg = document.getElementById("lb-img") as HTMLImageElement;
-  const lbClose = document.getElementById("lb-close")!;
-  const lbPrev = document.getElementById("lb-prev")!;
-  const lbNext = document.getElementById("lb-next")!;
-  const lbCounter = document.getElementById("lb-counter")!;
+  function ensureLightbox() {
+    let lb = document.getElementById("glb") as HTMLElement | null;
+    if (lb) return lb;
 
+    lb = document.createElement("div");
+    lb.id = "glb";
+    lb.setAttribute("role", "dialog");
+    lb.setAttribute("aria-modal", "true");
+    lb.setAttribute("aria-label", "Image viewer");
+    lb.setAttribute("aria-hidden", "true");
+    lb.innerHTML = `
+      <button id="glb-close" aria-label="Close lightbox">✕</button>
+      <button id="glb-prev"  aria-label="Previous image">‹</button>
+      <button id="glb-next"  aria-label="Next image">›</button>
+      <div id="glb-stage"><img id="glb-img" src="" alt="" /></div>
+      <div id="glb-counter"></div>
+    `;
+    document.body.appendChild(lb);
+    return lb;
+  }
+
+  // ── State ───────────────────────────────────────────────────────────────────
   let current = 0;
+  let srcs: string[] = [];
+  let btns: HTMLButtonElement[] = [];
+  let cleanupKeydown: (() => void) | null = null;
 
-  function open(index: number) {
+  // ── Helpers ─────────────────────────────────────────────────────────────────
+  function openLightbox(index: number) {
     current = index;
-    lbImg.src = srcs[current];
-    lbImg.alt = `Gallery image ${current + 1}`;
-    lbCounter.textContent = `${current + 1} / ${srcs.length}`;
-    lightbox.hidden = false;
+    const lb = document.getElementById("glb")!;
+    const img = document.getElementById("glb-img") as HTMLImageElement;
+    const counter = document.getElementById("glb-counter")!;
+
+    img.src = srcs[current];
+    img.alt = `Gallery image ${current + 1}`;
+    counter.textContent = `${current + 1} / ${srcs.length}`;
+
+    lb.classList.add("glb--open");
+    lb.setAttribute("aria-hidden", "false");
     document.body.style.overflow = "hidden";
-    lbClose.focus();
+
+    requestAnimationFrame(() => {
+      document.getElementById("glb-close")?.focus();
+    });
   }
 
-  function close() {
-    lightbox.hidden = true;
+  function closeLightbox() {
+    const lb = document.getElementById("glb")!;
+    lb.classList.remove("glb--open");
+    lb.setAttribute("aria-hidden", "true");
     document.body.style.overflow = "";
-    btns[current].focus();
+    btns[current]?.focus();
   }
 
-  function prev() {
-    open((current - 1 + srcs.length) % srcs.length);
-  }
-  function next() {
-    open((current + 1) % srcs.length);
+  function showPrev() {
+    openLightbox((current - 1 + srcs.length) % srcs.length);
   }
 
-  btns.forEach((btn, i) => btn.addEventListener("click", () => open(i)));
+  function showNext() {
+    openLightbox((current + 1) % srcs.length);
+  }
 
-  lbClose.addEventListener("click", close);
-  lbPrev.addEventListener("click", prev);
-  lbNext.addEventListener("click", next);
+  // ── Init (runs on every page-load) ─────────────────────────────────────────
+  function init() {
+    const lb = ensureLightbox();
 
-  lightbox.addEventListener("click", (e) => {
-    if (e.target === lightbox) close();
+    // Re-query buttons for this page
+    btns = Array.from(
+      document.querySelectorAll<HTMLButtonElement>(".gal-grid__btn"),
+    );
+    if (btns.length === 0) return;
+
+    srcs = btns.map((b) => b.dataset.src!);
+
+    // Attach gallery button listeners
+    btns.forEach((btn, i) =>
+      btn.addEventListener("click", () => openLightbox(i)),
+    );
+
+    // Lightbox click delegation
+    lb.addEventListener("click", (e) => {
+      const t = e.target as HTMLElement;
+      const id = t.id || t.closest("button")?.id;
+      if (id === "glb-close" || t === lb) {
+        closeLightbox();
+        return;
+      }
+      if (id === "glb-prev") {
+        showPrev();
+        return;
+      }
+      if (id === "glb-next") {
+        showNext();
+        return;
+      }
+    });
+
+    // Keyboard — tear down old listener before adding new one
+    if (cleanupKeydown) cleanupKeydown();
+    const onKeydown = (e: KeyboardEvent) => {
+      const lb = document.getElementById("glb");
+      if (!lb?.classList.contains("glb--open")) return;
+      if (e.key === "Escape") {
+        e.preventDefault();
+        closeLightbox();
+      }
+      if (e.key === "ArrowLeft") {
+        e.preventDefault();
+        showPrev();
+      }
+      if (e.key === "ArrowRight") {
+        e.preventDefault();
+        showNext();
+      }
+    };
+    document.addEventListener("keydown", onKeydown);
+    cleanupKeydown = () => document.removeEventListener("keydown", onKeydown);
+
+    // ── Scroll-reveal ─────────────────────────────────────────────────────────
+    const items = document.querySelectorAll<HTMLElement>(".gal-grid__item");
+
+    // Reset first — critical for re-navigation
+    items.forEach((el, i) => {
+      el.style.transition = "none";
+      el.style.opacity = "0";
+      el.style.transform = "translateY(24px)";
+      // Force reflow so the reset is painted before we re-enable transitions
+      el.getBoundingClientRect();
+      el.style.transition = `opacity 0.6s ease ${i * 60}ms, transform 0.6s ease ${i * 60}ms`;
+    });
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const el = entry.target as HTMLElement;
+            el.style.opacity = "1";
+            el.style.transform = "translateY(0)";
+            observer.unobserve(el);
+          }
+        });
+      },
+      { threshold: 0.05, rootMargin: "0px 0px -40px 0px" },
+    );
+
+    items.forEach((el) => observer.observe(el));
+  }
+
+  // Cleanup lightbox state before the DOM is swapped out
+  document.addEventListener("astro:before-swap", () => {
+    document.body.style.overflow = "";
+    const lb = document.getElementById("glb");
+    lb?.classList.remove("glb--open");
+    lb?.setAttribute("aria-hidden", "true");
   });
 
-  document.addEventListener("keydown", (e) => {
-    if (lightbox.hidden) return;
-    if (e.key === "Escape") close();
-    if (e.key === "ArrowLeft") prev();
-    if (e.key === "ArrowRight") next();
-  });
-
-  // Scroll-reveal
-  const observer = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          (entry.target as HTMLElement).style.opacity = "1";
-          (entry.target as HTMLElement).style.transform = "translateY(0)";
-          observer.unobserve(entry.target);
-        }
-      });
-    },
-    { threshold: 0.1, rootMargin: "0px 0px -50px 0px" },
-  );
-
-  document.querySelectorAll(".gal-grid__item").forEach((el, i) => {
-    const elem = el as HTMLElement;
-    elem.style.transitionDelay = `${i * 60}ms`;
-    observer.observe(elem);
-  });
+  document.addEventListener("astro:page-load", init);
 </script>
+
+<style is:global>
+  /* ── Lightbox (global — lives on <body>, outside Layout) ── */
+  #glb {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    background: rgba(10, 7, 5, 0.96);
+    align-items: center;
+    justify-content: center;
+    /* Explicitly neutralise any inherited transform / will-change */
+    transform: none !important;
+    will-change: auto !important;
+  }
+
+  #glb.glb--open {
+    display: flex;
+  }
+
+  #glb-stage {
+    max-width: 90vw;
+    max-height: 88vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  #glb-img {
+    max-width: 100%;
+    max-height: 88vh;
+    object-fit: contain;
+    display: block;
+    box-shadow: 0 40px 100px rgba(0, 0, 0, 0.6);
+    border-radius: 2px;
+  }
+
+  #glb-close {
+    position: fixed;
+    top: 1.5rem;
+    right: 1.5rem;
+    background: none;
+    border: 1px solid rgba(212, 181, 165, 0.2);
+    border-radius: 50%;
+    color: var(--blush, #d4b5a5);
+    font-size: 1.25rem;
+    cursor: pointer;
+    width: 3rem;
+    height: 3rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition:
+      color 0.2s,
+      transform 0.2s,
+      border-color 0.2s;
+    z-index: 10000;
+    line-height: 1;
+  }
+
+  #glb-close:hover {
+    color: var(--ivory, #f5f0ea);
+    border-color: rgba(212, 181, 165, 0.6);
+    transform: rotate(90deg);
+  }
+
+  #glb-prev,
+  #glb-next {
+    position: fixed;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: var(--blush, #d4b5a5);
+    font-size: 3.5rem;
+    cursor: pointer;
+    padding: 1rem;
+    transition:
+      color 0.2s,
+      transform 0.2s;
+    font-family: "Cormorant Garamond", serif;
+    line-height: 1;
+    z-index: 10000;
+  }
+
+  #glb-prev {
+    left: 1rem;
+  }
+  #glb-next {
+    right: 1rem;
+  }
+
+  #glb-prev:hover {
+    color: var(--ivory, #f5f0ea);
+    transform: translateY(-50%) translateX(-4px);
+  }
+  #glb-next:hover {
+    color: var(--ivory, #f5f0ea);
+    transform: translateY(-50%) translateX(4px);
+  }
+
+  #glb-counter {
+    position: fixed;
+    bottom: 1.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: "Cormorant SC", serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.15em;
+    color: var(--rosewood, #b8937f);
+  }
+</style>
 
 <style>
   /* ─── Hero ─── */
@@ -235,11 +408,9 @@ const images = [g1, g2, g3, g4, g5, g6, g7, g8, g9, g10, g11];
   .gal-grid__item {
     break-inside: avoid;
     margin-bottom: 1.25rem;
+    /* Start hidden — JS will reset & animate */
     opacity: 0;
     transform: translateY(24px);
-    transition:
-      opacity 0.6s ease,
-      transform 0.6s ease;
   }
 
   .gal-grid__btn {
@@ -284,115 +455,12 @@ const images = [g1, g2, g3, g4, g5, g6, g7, g8, g9, g10, g11];
   .gal-grid__btn:hover .gal-grid__img {
     transform: scale(1.04);
   }
-
   .gal-grid__btn:hover .gal-grid__overlay {
     background: rgba(26, 20, 16, 0.45);
   }
-
   .gal-grid__btn:hover .gal-grid__zoom {
     opacity: 1;
     transform: scale(1);
-  }
-
-  /* ─── Lightbox ─── */
-  .lightbox {
-    position: fixed;
-    inset: 0;
-    z-index: 1000;
-    background: rgba(10, 7, 5, 0.96);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .lightbox[hidden] {
-    display: none;
-  }
-
-  .lightbox__stage {
-    max-width: 90vw;
-    max-height: 88vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .lightbox__img {
-    max-width: 100%;
-    max-height: 88vh;
-    object-fit: contain;
-    display: block;
-    box-shadow: 0 40px 100px rgba(0, 0, 0, 0.6);
-  }
-
-  .lightbox__close {
-    position: absolute;
-    top: 1.5rem;
-    right: 1.5rem;
-    background: none;
-    border: none;
-    color: var(--blush);
-    font-size: 1.5rem;
-    cursor: pointer;
-    width: 3rem;
-    height: 3rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition:
-      color 0.2s,
-      transform 0.2s;
-    font-family: "Inter", sans-serif;
-  }
-
-  .lightbox__close:hover {
-    color: var(--ivory);
-    transform: rotate(90deg);
-  }
-
-  .lightbox__nav {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    background: none;
-    border: none;
-    color: var(--blush);
-    font-size: 3.5rem;
-    cursor: pointer;
-    padding: 1rem;
-    transition:
-      color 0.2s,
-      transform 0.2s;
-    font-family: "Cormorant Garamond", serif;
-    line-height: 1;
-  }
-
-  .lightbox__nav--prev {
-    left: 1rem;
-  }
-  .lightbox__nav--next {
-    right: 1rem;
-  }
-
-  .lightbox__nav:hover {
-    color: var(--ivory);
-  }
-  .lightbox__nav--prev:hover {
-    transform: translateY(-50%) translateX(-4px);
-  }
-  .lightbox__nav--next:hover {
-    transform: translateY(-50%) translateX(4px);
-  }
-
-  .lightbox__counter {
-    position: absolute;
-    bottom: 1.5rem;
-    left: 50%;
-    transform: translateX(-50%);
-    font-family: "Cormorant SC", serif;
-    font-size: 0.75rem;
-    letter-spacing: 0.15em;
-    color: var(--rosewood);
   }
 
   /* ─── View Transitions ─── */
@@ -411,7 +479,6 @@ const images = [g1, g2, g3, g4, g5, g6, g7, g8, g9, g10, g11];
       opacity: 0;
     }
   }
-
   @keyframes gal-fade-in {
     from {
       opacity: 0;
