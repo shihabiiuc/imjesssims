@@ -1,11 +1,458 @@
 ---
-import Welcome from '../components/Welcome.astro';
-import Layout from '../layouts/Layout.astro';
+import Layout from "../layouts/Layout.astro";
 
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+import heroImg from "../assets/DSC08455-scaled-1-qq5ihvu92pl0xmwdei1hcvi8hph3kk7qh87u6cyv74.jpg";
+import aboutImg from "../assets/278005815_650237549416000_8419071854392255285_n-887x1024.jpg";
+import standImg from "../assets/ALC-Sweater-Dress-06-Updated-scaled-ozmvzsifhqrvrm4khews4ilhqs4eka0pg9wz8qybls.jpg";
 ---
 
-<Layout>
-	<Welcome />
+<Layout title="Jess Sims — Writer, Author & Body Positivity Advocate">
+  <!-- ============================
+       HERO
+       ============================ -->
+  <section class="hero">
+    <div class="hero-bg">
+      <img src={heroImg.src} alt="Jess Sims" class="hero-img" />
+      <div class="hero-overlay"></div>
+    </div>
+
+    <div class="hero-content container">
+      <div class="hero-text">
+        <p class="eyebrow hero-eyebrow">
+          Health &amp; Wellness · Women's Health · Femtech
+        </p>
+        <h1 class="display-xl hero-name">
+          Jess<br />Sims
+        </h1>
+        <p class="hero-sub display-md">
+          Writer, Author &<br />Body Positivity Advocate
+        </p>
+        <div class="hero-actions">
+          <a href="/about" class="btn btn-light">About Me</a>
+          <a href="/contact" class="btn btn-rose">Get In Touch</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-scroll-cue" aria-hidden="true">
+      <span></span>
+    </div>
+  </section>
+
+  <!-- Publication ticker -->
+  <div class="ticker-wrap" aria-hidden="true">
+    <div class="ticker-track">
+      <span>SELF</span>
+      <span>Women's Health</span>
+      <span>HelloGiggles</span>
+      <span>Glamour UK</span>
+      <span>Health Magazine</span>
+      <span>Healthline</span>
+      <span>InStyle</span>
+      <span>Teen Vogue</span>
+      <span>Harper's Bazaar</span>
+      <span>Bustle</span>
+      <span>Ebony</span>
+      <span>Northwell Health</span>
+      <span>SELF</span>
+      <span>Women's Health</span>
+      <span>HelloGiggles</span>
+      <span>Glamour UK</span>
+      <span>Health Magazine</span>
+      <span>Healthline</span>
+      <span>InStyle</span>
+      <span>Teen Vogue</span>
+      <span>Harper's Bazaar</span>
+      <span>Bustle</span>
+      <span>Ebony</span>
+      <span>Northwell Health</span>
+    </div>
+  </div>
+
+  <!-- ============================
+       WHO I AM
+       ============================ -->
+  <section class="who section">
+    <div class="container who-grid">
+      <div class="who-img-col reveal">
+        <div class="who-img-frame">
+          <img src={aboutImg.src} alt="Jess Sims" class="who-img" />
+          <div class="who-img-accent" aria-hidden="true"></div>
+        </div>
+      </div>
+
+      <div class="who-text-col">
+        <p class="eyebrow reveal">Who I Am</p>
+        <h2 class="display-lg who-heading reveal reveal-delay-1">
+          Health &amp;<br />Wellness Writer
+        </h2>
+        <div class="divider reveal reveal-delay-2"></div>
+        <p class="body-lg reveal reveal-delay-2">
+          My name is Jess — freelance journalist, copywriter, and content writer
+          focused on health &amp; wellness, women's health, and femtech.
+        </p>
+        <p class="body-lg reveal reveal-delay-3" style="margin-top:1rem">
+          My work has appeared in <em>SELF</em>, <em>Women's Health</em>,
+          <em>HelloGiggles</em>, <em>Glamour UK</em>, and many others. I've also
+          partnered with brands like Plan B One-Step® and Maven Clinic, with
+          deep roots in biotech and pharmaceuticals.
+        </p>
+        <div class="reveal reveal-delay-4" style="margin-top:2rem">
+          <a href="/about" class="btn btn-dark">Read more about me</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================
+       WHAT I STAND FOR
+       ============================ -->
+  <section class="stand section">
+    <div class="stand-inner">
+      <div class="stand-text-col container-left">
+        <p class="eyebrow reveal" style="color:var(--blush)">
+          What I Stand For
+        </p>
+        <h2 class="display-lg stand-heading reveal reveal-delay-1">
+          Women,<br />Wellness &amp;<br />Body Positivity
+        </h2>
+        <p
+          class="body-lg reveal reveal-delay-2"
+          style="color:rgba(247,242,238,0.8); margin-top:1.5rem"
+        >
+          I'm passionate about wellness for women — having worked extensively in
+          women's wellness and reproductive health. My eyes light up talking
+          about diet culture and body positivity.
+        </p>
+        <p
+          class="body-lg reveal reveal-delay-3"
+          style="color:rgba(247,242,238,0.8); margin-top:1rem"
+        >
+          When I'm not collaborating with brands or writing bylines, I'm
+          crafting my debut novel — a contemporary women's fiction story. 📖
+        </p>
+        <div class="reveal reveal-delay-4" style="margin-top:2.5rem">
+          <a href="/contact" class="btn btn-light">Work With Me</a>
+        </div>
+      </div>
+
+      <div class="stand-img-col reveal">
+        <img src={standImg.src} alt="Jess Sims" class="stand-img" />
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================
+       PORTFOLIO PREVIEW
+       ============================ -->
+  <section class="clips section">
+    <div class="container">
+      <div class="clips-header">
+        <p class="eyebrow reveal">Where to Read My Work</p>
+        <h2 class="display-md clips-title reveal reveal-delay-1">
+          Featured Clips
+        </h2>
+      </div>
+
+      <div class="clips-grid">
+        {
+          [
+            {
+              pub: "SELF",
+              title:
+                "3 Signs Your Doctor Isn't Taking Your Heart Health Seriously",
+              tag: "Health",
+            },
+            {
+              pub: "Healthline",
+              title:
+                "Dear Fat, Black Girls Who Were Not Spared from Diet Culture — I Understand",
+              tag: "Wellness",
+            },
+            {
+              pub: "HelloGiggles",
+              title:
+                "9 Black-Owned Health and Wellness Brands You Need to Follow on TikTok",
+              tag: "Culture",
+            },
+            {
+              pub: "Health Magazine",
+              title:
+                "6 Ways to Combat 'Summer Body Syndrome' and Learn to Love the Body You've Got",
+              tag: "Body Positivity",
+            },
+          ].map((item, i) => (
+            <article class={`clip-card reveal reveal-delay-${i + 1}`}>
+              <span class="clip-pub eyebrow">{item.pub}</span>
+              <p class="clip-tag">{item.tag}</p>
+              <h3 class="clip-title display-md">{item.title}</h3>
+            </article>
+          ))
+        }
+      </div>
+
+      <div class="clips-cta reveal">
+        <a href="/portfolio" class="btn btn-dark">View Full Portfolio</a>
+      </div>
+    </div>
+  </section>
 </Layout>
+
+<style>
+  /* ---- HERO ---- */
+  .hero {
+    position: relative;
+    height: 100vh;
+    min-height: 600px;
+    display: flex;
+    align-items: flex-end;
+    overflow: hidden;
+  }
+
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+  }
+
+  .hero-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+  }
+
+  .hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      to top,
+      rgba(26, 20, 16, 0.92) 0%,
+      rgba(26, 20, 16, 0.5) 40%,
+      rgba(26, 20, 16, 0.15) 100%
+    );
+  }
+
+  .hero-content {
+    position: relative;
+    z-index: 2;
+    padding-bottom: clamp(4rem, 8vw, 7rem);
+  }
+
+  .hero-text {
+    max-width: 700px;
+  }
+
+  .hero-eyebrow {
+    color: var(--blush);
+    margin-bottom: 1.25rem;
+  }
+
+  .hero-name {
+    color: var(--ivory);
+    margin-bottom: 1rem;
+  }
+
+  .hero-sub {
+    color: var(--blush);
+    font-style: italic;
+    margin-bottom: 2.5rem;
+    opacity: 0.85;
+  }
+
+  .hero-actions {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .hero-scroll-cue {
+    position: absolute;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 2;
+  }
+
+  .hero-scroll-cue span {
+    display: block;
+    width: 1px;
+    height: 56px;
+    background: linear-gradient(to bottom, transparent, var(--rosewood));
+    margin: 0 auto;
+    animation: scroll-line 2s ease-in-out infinite;
+  }
+
+  @keyframes scroll-line {
+    0%,
+    100% {
+      transform: scaleY(0);
+      transform-origin: top;
+    }
+    50% {
+      transform: scaleY(1);
+      transform-origin: top;
+    }
+  }
+
+  /* ---- WHO I AM ---- */
+  .who-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(3rem, 6vw, 6rem);
+    align-items: center;
+  }
+
+  .who-img-frame {
+    position: relative;
+  }
+
+  .who-img {
+    width: 100%;
+    aspect-ratio: 3/4;
+    object-fit: cover;
+    display: block;
+  }
+
+  .who-img-accent {
+    position: absolute;
+    top: -16px;
+    left: -16px;
+    right: 16px;
+    bottom: 16px;
+    border: 1.5px solid var(--rosewood);
+    z-index: -1;
+    pointer-events: none;
+  }
+
+  .who-heading {
+    color: var(--espresso);
+    margin-block: 1rem;
+  }
+
+  /* ---- STAND FOR ---- */
+  .stand {
+    background: var(--espresso);
+    padding-block: 0;
+  }
+
+  .stand-inner {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    min-height: 75vh;
+  }
+
+  .stand-text-col {
+    padding-block: var(--section-pad);
+    padding-inline: var(--gutter) clamp(2rem, 5vw, 5rem);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .stand-heading {
+    color: var(--ivory);
+    margin-block: 1.25rem;
+  }
+
+  .stand-img-col {
+    overflow: hidden;
+  }
+
+  .stand-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top;
+    display: block;
+    transition: transform 0.8s var(--ease-out);
+  }
+
+  .stand-img-col:hover .stand-img {
+    transform: scale(1.03);
+  }
+
+  /* ---- CLIPS ---- */
+  .clips {
+    background: var(--parchment);
+  }
+
+  .clips-header {
+    margin-bottom: 3rem;
+  }
+
+  .clips-title {
+    margin-top: 0.5rem;
+  }
+
+  .clips-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1.5px;
+    background: var(--blush);
+  }
+
+  .clip-card {
+    background: var(--ivory);
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    transition: background 0.3s ease;
+  }
+
+  .clip-card:hover {
+    background: var(--white);
+  }
+
+  .clip-pub {
+    color: var(--rosewood);
+  }
+
+  .clip-tag {
+    font-size: 0.7rem;
+    font-family: var(--font-body);
+    color: var(--warm-mid);
+    letter-spacing: 0.05em;
+  }
+
+  .clip-title {
+    font-size: clamp(1rem, 1.8vw, 1.3rem);
+    font-weight: 400;
+    color: var(--espresso);
+    line-height: 1.3;
+    margin-top: 0.5rem;
+  }
+
+  .clips-cta {
+    margin-top: 3rem;
+    text-align: center;
+  }
+
+  /* ---- RESPONSIVE ---- */
+  @media (max-width: 900px) {
+    .who-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .who-img-col {
+      max-width: 420px;
+      margin: 0 auto;
+    }
+
+    .stand-inner {
+      grid-template-columns: 1fr;
+    }
+
+    .stand-img-col {
+      height: 55vw;
+      min-height: 320px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .hero-actions {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  }
+</style>

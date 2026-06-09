@@ -1,0 +1,516 @@
+---
+import Layout from "../layouts/Layout.astro";
+---
+
+<Layout title="Contact — Jess Sims">
+  <!-- Split hero -->
+  <section class="contact-hero">
+    <div class="contact-hero__left">
+      <span class="contact-hero__eyebrow">Get in Touch</span>
+      <h1 class="contact-hero__title">
+        Let's find ways<br />to work <em>together.</em>
+      </h1>
+      <p class="contact-hero__sub">
+        I'm always open to conversations with people looking for a thoughtful
+        voice around plus-size fashion, body positivity, women's health, and
+        culture.
+      </p>
+
+      <div class="contact-info">
+        <a href="mailto:jess@imjesssims.com" class="contact-info__item">
+          <span class="contact-info__label">Email</span>
+          <span class="contact-info__value">jess@imjesssims.com</span>
+        </a>
+        <div class="contact-info__divider"></div>
+        <div class="contact-info__tags">
+          <span class="contact-info__tag">#HAES</span>
+          <span class="contact-info__tag">#BodyPositivity</span>
+          <span class="contact-info__tag">#PlusSizeFashion</span>
+          <span class="contact-info__tag">#WomensHealth</span>
+          <span class="contact-info__tag">#Culture</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="contact-hero__right">
+      <div class="contact-form-card">
+        <div class="contact-form-card__header">
+          <span class="contact-form-card__eyebrow">Send a message</span>
+        </div>
+
+        <!-- Formspree form -->
+        <form
+          action="https://formspree.io/f/YOUR_FORM_ID"
+          method="POST"
+          class="contact-form"
+          id="contact-form"
+        >
+          <div class="form-row form-row--two">
+            <div class="form-field">
+              <label class="form-label" for="name">Name</label>
+              <input
+                type="text"
+                id="name"
+                name="name"
+                class="form-input"
+                placeholder="Your full name"
+                required
+                autocomplete="name"
+              />
+            </div>
+            <div class="form-field">
+              <label class="form-label" for="email">Email</label>
+              <input
+                type="email"
+                id="email"
+                name="email"
+                class="form-input"
+                placeholder="your@email.com"
+                required
+                autocomplete="email"
+              />
+            </div>
+          </div>
+
+          <div class="form-field">
+            <label class="form-label" for="subject">Subject</label>
+            <select
+              id="subject"
+              name="subject"
+              class="form-input form-select"
+              required
+            >
+              <option value="" disabled selected
+                >What are you reaching out about?</option
+              >
+              <option value="Freelance Copywriting"
+                >Freelance Copywriting</option
+              >
+              <option value="Brand Partnership">Brand Partnership</option>
+              <option value="Speaking Opportunity">Speaking Opportunity</option>
+              <option value="Collaboration">Collaboration</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+
+          <div class="form-field">
+            <label class="form-label" for="message">Message</label>
+            <textarea
+              id="message"
+              name="message"
+              class="form-input form-textarea"
+              placeholder="Tell me a little about your project or idea…"
+              required
+              rows="5"></textarea>
+          </div>
+
+          <!-- Formspree honeypot -->
+          <input type="text" name="_gotcha" style="display:none" />
+          <!-- Redirect after submit -->
+          <input
+            type="hidden"
+            name="_next"
+            value="https://yoursite.com/thanks"
+          />
+
+          <button type="submit" class="form-submit" id="form-submit">
+            <span class="form-submit__text">Send Message</span>
+            <span class="form-submit__icon">→</span>
+          </button>
+
+          <p class="form-status" id="form-status" aria-live="polite"></p>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- Bottom strip -->
+  <div class="contact-strip">
+    <p class="contact-strip__text">
+      Drop me a line and let's see how we can work together
+      <span class="contact-strip__emoji">🙂</span>
+    </p>
+  </div>
+</Layout>
+
+<script>
+  const form = document.getElementById("contact-form") as HTMLFormElement;
+  const btn = document.getElementById("form-submit") as HTMLButtonElement;
+  const status = document.getElementById("form-status")!;
+
+  form?.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    btn.disabled = true;
+    btn.querySelector(".form-submit__text")!.textContent = "Sending…";
+
+    try {
+      const data = new FormData(form);
+      const res = await fetch(form.action, {
+        method: "POST",
+        body: data,
+        headers: { Accept: "application/json" },
+      });
+
+      if (res.ok) {
+        status.textContent = "✓ Message sent! I'll be in touch soon.";
+        status.classList.add("form-status--success");
+        form.reset();
+        btn.querySelector(".form-submit__text")!.textContent = "Message Sent ✓";
+      } else {
+        throw new Error();
+      }
+    } catch {
+      status.textContent =
+        "Something went wrong. Try emailing me directly at jess@imjesssims.com";
+      status.classList.add("form-status--error");
+      btn.disabled = false;
+      btn.querySelector(".form-submit__text")!.textContent = "Send Message";
+    }
+  });
+</script>
+
+<style>
+  /* ─── Hero ─── */
+  .contact-hero {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    background: var(--ivory);
+  }
+
+  @media (max-width: 900px) {
+    .contact-hero {
+      grid-template-columns: 1fr;
+      min-height: auto;
+    }
+  }
+
+  /* ─── Left ─── */
+  .contact-hero__left {
+    padding: clamp(7rem, 12vw, 10rem) clamp(2rem, 7vw, 7rem)
+      clamp(5rem, 8vw, 7rem);
+    background: var(--espresso);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .contact-hero__left::before {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 40%;
+    background: linear-gradient(to top, rgba(107, 61, 46, 0.15), transparent);
+    pointer-events: none;
+  }
+
+  .contact-hero__eyebrow {
+    font-family: "Cormorant SC", serif;
+    font-size: 0.8rem;
+    letter-spacing: 0.2em;
+    color: var(--rosewood);
+    text-transform: uppercase;
+    margin-bottom: 1.5rem;
+    display: block;
+  }
+
+  .contact-hero__title {
+    font-family: "Cormorant Garamond", serif;
+    font-size: clamp(2.5rem, 5vw, 4.5rem);
+    font-weight: 300;
+    color: var(--blush);
+    line-height: 1.1;
+    margin: 0 0 2rem;
+    letter-spacing: -0.02em;
+  }
+
+  .contact-hero__title em {
+    font-style: italic;
+    color: var(--rosewood);
+  }
+
+  .contact-hero__sub {
+    font-family: "Inter", sans-serif;
+    font-size: 1rem;
+    color: rgba(212, 181, 165, 0.75);
+    line-height: 1.75;
+    max-width: 38ch;
+    margin: 0 0 3rem;
+  }
+
+  .contact-info {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .contact-info__item {
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .contact-info__label {
+    font-family: "Cormorant SC", serif;
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    color: var(--rosewood);
+  }
+
+  .contact-info__value {
+    font-family: "Inter", sans-serif;
+    font-size: 0.9rem;
+    color: var(--blush);
+    transition: color 0.2s;
+    border-bottom: 1px solid rgba(184, 147, 127, 0.3);
+    padding-bottom: 0.25rem;
+    align-self: flex-start;
+  }
+
+  .contact-info__item:hover .contact-info__value {
+    color: var(--ivory);
+    border-color: var(--rosewood);
+  }
+
+  .contact-info__divider {
+    width: 3rem;
+    height: 1px;
+    background: rgba(184, 147, 127, 0.3);
+  }
+
+  .contact-info__tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .contact-info__tag {
+    font-family: "Cormorant SC", serif;
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    color: rgba(184, 147, 127, 0.6);
+    padding: 0.3rem 0.75rem;
+    border: 1px solid rgba(184, 147, 127, 0.2);
+    transition: all 0.2s;
+    cursor: default;
+  }
+
+  .contact-info__tag:hover {
+    color: var(--rosewood);
+    border-color: var(--rosewood);
+  }
+
+  /* ─── Right ─── */
+  .contact-hero__right {
+    padding: clamp(5rem, 10vw, 8rem) clamp(2rem, 6vw, 6rem);
+    display: flex;
+    align-items: center;
+    background: var(--mahogany);
+  }
+
+  .contact-form-card {
+    width: 100%;
+    max-width: 540px;
+    margin: 0 auto;
+  }
+
+  .contact-form-card__header {
+    margin-bottom: 2.5rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--blush);
+  }
+
+  .contact-form-card__eyebrow {
+    font-family: "Cormorant SC", serif;
+    font-size: 0.8rem;
+    letter-spacing: 0.2em;
+    color: var(--rosewood);
+    text-transform: uppercase;
+  }
+
+  /* ─── Form ─── */
+  .contact-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .form-row--two {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.25rem;
+  }
+
+  @media (max-width: 500px) {
+    .form-row--two {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .form-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .form-label {
+    font-family: "Cormorant SC", serif;
+    font-size: 0.72rem;
+    letter-spacing: 0.18em;
+    color: var(--rosewood);
+    text-transform: uppercase;
+  }
+
+  .form-input {
+    background: var(--ivory);
+    border: 1px solid var(--blush);
+    border-radius: 0;
+    padding: 0.875rem 1rem;
+    font-family: "Inter", sans-serif;
+    font-size: 0.95rem;
+    color: var(--espresso);
+    outline: none;
+    transition:
+      border-color 0.25s,
+      box-shadow 0.25s;
+    width: 100%;
+    box-sizing: border-box;
+    -webkit-appearance: none;
+    appearance: none;
+  }
+
+  .form-input::placeholder {
+    color: rgba(107, 61, 46, 0.35);
+  }
+
+  .form-input:focus {
+    border-color: var(--rosewood);
+    box-shadow: 0 0 0 3px rgba(184, 147, 127, 0.12);
+  }
+
+  .form-select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='7' viewBox='0 0 12 7'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23b8937f' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 1rem center;
+    padding-right: 2.5rem;
+    cursor: pointer;
+  }
+
+  .form-textarea {
+    resize: vertical;
+    min-height: 130px;
+    line-height: 1.6;
+  }
+
+  .form-submit {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    padding: 1.1rem 2.5rem;
+    background: var(--rosewood);
+    color: var(--ivory);
+    border: none;
+    cursor: pointer;
+    font-family: "Cormorant SC", serif;
+    font-size: 0.85rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    transition:
+      background 0.3s,
+      transform 0.3s;
+    margin-top: 0.5rem;
+  }
+
+  .form-submit:hover:not(:disabled) {
+    background: var(--warm-mid);
+    transform: translateY(-2px);
+  }
+
+  .form-submit:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
+  .form-submit__icon {
+    font-size: 1rem;
+    font-family: "Inter", sans-serif;
+    transition: transform 0.25s;
+  }
+
+  .form-submit:hover:not(:disabled) .form-submit__icon {
+    transform: translateX(4px);
+  }
+
+  .form-status {
+    font-family: "Inter", sans-serif;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    min-height: 1.5rem;
+    margin: 0;
+  }
+
+  .form-status--success {
+    color: #4a7c59;
+  }
+  .form-status--error {
+    color: var(--mahogany);
+  }
+
+  /* ─── Bottom strip ─── */
+  .contact-strip {
+    padding: 2.5rem clamp(1.5rem, 8vw, 8rem);
+    background: var(--rosewood);
+    text-align: center;
+  }
+
+  .contact-strip__text {
+    font-family: "Cormorant Garamond", serif;
+    font-size: clamp(1.2rem, 2.5vw, 1.75rem);
+    font-style: italic;
+    color: var(--ivory);
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+  }
+
+  .contact-strip__emoji {
+    font-style: normal;
+    font-size: 1.1em;
+  }
+
+  /* ─── View Transitions ─── */
+  ::view-transition-old(root) {
+    animation: 300ms ease-in both contact-fade-out;
+  }
+  ::view-transition-new(root) {
+    animation: 400ms ease-out both contact-fade-in;
+  }
+
+  @keyframes contact-fade-out {
+    from {
+      opacity: 1;
+    }
+    to {
+      opacity: 0;
+    }
+  }
+
+  @keyframes contact-fade-in {
+    from {
+      opacity: 0;
+      transform: translateY(12px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+</style>

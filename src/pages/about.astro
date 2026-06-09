@@ -1,0 +1,403 @@
+---
+import Layout from "../layouts/Layout.astro";
+import floralImg from "../assets/Floral-set-scaled-ozmvzsif4l4jyljg4hkpipuz5vxz2mo5vaoxz98o9k.jpg";
+import aboutPortrait from "../assets/473568196_1355445745561840_1058440716263612476_n.jpg";
+
+const faqs = [
+  { q: "Favorite vacation spot?", a: "Cairo, Egypt — always." },
+  {
+    q: "Best advice ever received?",
+    a: "Do the work, be grateful & the results will come.",
+  },
+  { q: "Favorite hobbies?", a: "Spending time with my nephew and traveling." },
+  {
+    q: "Something most people don't know?",
+    a: "I'm a military brat — I've moved 10 times!",
+  },
+  { q: "Can't live without?", a: "Unfortunately, my laptop. (Ha!)" },
+  {
+    q: "Goals for this year?",
+    a: "Work with more women's health brands & write as much as possible.",
+  },
+  { q: "Secret talent?", a: "18-year staring contest champion." },
+  {
+    q: "Favorite inspirational quote?",
+    a: '"The most common way people give up their power is by thinking they don\'t have any." — Alice Walker',
+  },
+];
+
+const expertise = [
+  "Women's Health",
+  "Wellness & Lifestyle",
+  "Neurology",
+  "Oncology",
+  "Genomics",
+  "Immunology",
+];
+---
+
+<Layout
+  title="About — Jess Sims"
+  description="Jess Sims is a freelance health and wellness writer with expertise in women's health, femtech, and wellness content."
+>
+  <!-- ============================
+       PAGE HERO
+       ============================ -->
+  <section class="about-hero">
+    <div class="about-hero-bg">
+      <img
+        src={floralImg.src}
+        alt=""
+        class="about-hero-img"
+        aria-hidden="true"
+      />
+      <div class="about-hero-overlay"></div>
+    </div>
+    <div class="about-hero-content container">
+      <p class="eyebrow reveal" style="color:var(--blush)">
+        Health &amp; Wellness Writer
+      </p>
+      <h1 class="display-xl reveal reveal-delay-1" style="color:var(--ivory)">
+        Hey There,<br /><em>I'm Jess</em>
+      </h1>
+    </div>
+  </section>
+
+  <!-- ============================
+       INTRO BIO
+       ============================ -->
+  <section class="bio section">
+    <div class="container bio-grid">
+      <div class="bio-text">
+        <p class="eyebrow reveal">My Story</p>
+        <h2 class="display-md bio-heading reveal reveal-delay-1">
+          From PR &amp; Pharma<br />to the Byline
+        </h2>
+        <div class="divider reveal reveal-delay-2"></div>
+        <p class="body-lg reveal reveal-delay-2">
+          I am a freelance digital health and wellness writer and journalist. I
+          work with brands to produce informative, engaging content that
+          educates and galvanizes their target audience.
+        </p>
+        <p class="body-lg reveal reveal-delay-3" style="margin-top:1rem">
+          Before pivoting to writing, I spent close to a decade on the marketing
+          and public relations side — working with brands like Bristol Myers
+          Squibb, Teva Pharmaceuticals, and Gilead Sciences.
+        </p>
+
+        <div class="expertise-block reveal reveal-delay-4">
+          <p class="eyebrow" style="margin-bottom:1rem">Areas of Expertise</p>
+          <div class="expertise-tags">
+            {expertise.map((tag) => <span class="tag">{tag}</span>)}
+          </div>
+        </div>
+
+        <div class="reveal reveal-delay-4" style="margin-top:2.5rem">
+          <a href="/portfolio" class="btn btn-dark">Read My Portfolio</a>
+        </div>
+      </div>
+
+      <div class="bio-img-col reveal">
+        <div class="bio-img-frame">
+          <img src={aboutPortrait.src} alt="Jess Sims" class="bio-img" />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================
+       HOW CAN A HEALTH WRITER HELP?
+       ============================ -->
+  <section class="help-section section">
+    <div class="container">
+      <div class="help-header">
+        <p class="eyebrow reveal">For Brands &amp; Marketers</p>
+        <h2 class="display-lg help-title reveal reveal-delay-1">
+          How Can a Health<br />Freelance Writer Help You?
+        </h2>
+      </div>
+
+      <div class="help-grid">
+        <div class="help-card reveal">
+          <span class="help-num eyebrow">01</span>
+          <h3 class="help-card-title">Find Your Audience</h3>
+          <p class="body-lg help-card-text">
+            The Internet is crowded. Millions of webpages and articles claim
+            expertise on everything. SEO-driven, targeted health content cuts
+            through the noise and puts your brand in front of people already
+            searching for answers.
+          </p>
+        </div>
+
+        <div class="help-card reveal reveal-delay-1">
+          <span class="help-num eyebrow">02</span>
+          <h3 class="help-card-title">Build Authority</h3>
+          <p class="body-lg help-card-text">
+            You're not just selling a product or service — you're providing
+            value, establishing your brand as an authority, and building lasting
+            relationships. That translates directly into sales conversions and
+            customer loyalty.
+          </p>
+        </div>
+
+        <div class="help-card reveal reveal-delay-2">
+          <span class="help-num eyebrow">03</span>
+          <h3 class="help-card-title">Deliver Results</h3>
+          <p class="body-lg help-card-text">
+            As a seasoned health content writer, I'm uniquely positioned to
+            craft your message and deliver it where your audience is already
+            searching. People want answers — let's make sure you show up for
+            them.
+          </p>
+        </div>
+      </div>
+
+      <div class="help-cta reveal" style="margin-top:3rem; text-align:center">
+        <a href="/contact" class="btn btn-rose">Let's Work Together</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================
+       FUN Q&A
+       ============================ -->
+  <section class="qa-section section">
+    <div class="container">
+      <div class="qa-intro">
+        <p class="eyebrow reveal">Get to Know Me Better</p>
+        <h2 class="display-md reveal reveal-delay-1">8 Things About Jess</h2>
+      </div>
+
+      <div class="qa-grid">
+        {
+          faqs.map((item, i) => (
+            <div class={`qa-item reveal reveal-delay-${(i % 4) + 1}`}>
+              <p class="qa-num eyebrow">#{String(i + 1).padStart(2, "0")}</p>
+              <p class="qa-q">{item.q}</p>
+              <p class="qa-a body-lg">{item.a}</p>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  /* ---- ABOUT HERO ---- */
+  .about-hero {
+    position: relative;
+    height: 70vh;
+    min-height: 480px;
+    display: flex;
+    align-items: flex-end;
+    overflow: hidden;
+  }
+
+  .about-hero-bg {
+    position: absolute;
+    inset: 0;
+  }
+
+  .about-hero-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 30%;
+  }
+
+  .about-hero-overlay {
+    position: absolute;
+    inset: 0;
+    background-image: linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 0.7),
+      rgba(0, 0, 0, 0.5)
+    );
+
+    /* background-image: linear-gradient(to right, #0066cc55, #9933ff88); */
+
+    /* background: linear-gradient(
+      to top,
+      rgba(26, 20, 16, 0.9) 0%,
+      rgba(26, 20, 16, 0.4) 60%,
+      transparent 100%
+    ); */
+  }
+
+  .about-hero-content {
+    position: relative;
+    z-index: 2;
+    padding-bottom: clamp(3.5rem, 6vw, 6rem);
+  }
+
+  .about-hero-content .eyebrow {
+    margin-bottom: 1rem;
+  }
+
+  /* ---- BIO ---- */
+  .bio-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(3rem, 6vw, 7rem);
+    align-items: center;
+  }
+
+  .bio-heading {
+    margin-block: 1rem;
+  }
+
+  .expertise-block {
+    margin-top: 2rem;
+    padding: 1.75rem 2rem;
+    background: var(--parchment);
+    border-left: 3px solid var(--rosewood);
+  }
+
+  .expertise-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .tag {
+    font-family: var(--font-sc);
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    padding: 0.35rem 0.9rem;
+    border: 1px solid var(--blush);
+    color: var(--warm-mid);
+  }
+
+  .bio-img-frame {
+    position: relative;
+  }
+
+  .bio-img {
+    width: 100%;
+    aspect-ratio: 3/4;
+    object-fit: cover;
+    display: block;
+  }
+
+  .bio-img-frame::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border: 1.5px solid var(--rosewood);
+    transform: translate(16px, 16px);
+    z-index: -1;
+  }
+
+  /* ---- HELP SECTION ---- */
+  .help-section {
+    background: var(--espresso);
+    color: var(--ivory);
+  }
+
+  .help-header {
+    margin-bottom: 3.5rem;
+  }
+
+  .help-title {
+    color: var(--ivory);
+    margin-top: 0.75rem;
+  }
+
+  .help-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+  }
+
+  .help-card {
+    padding: 2.5rem 2rem;
+    border: 1px solid rgba(184, 147, 127, 0.2);
+    transition: border-color 0.3s ease;
+  }
+
+  .help-card:hover {
+    border-color: var(--rosewood);
+  }
+
+  .help-num {
+    color: var(--rosewood);
+    display: block;
+    margin-bottom: 1rem;
+  }
+
+  .help-card-title {
+    font-family: var(--font-display);
+    font-size: 1.6rem;
+    font-weight: 400;
+    margin-bottom: 1rem;
+    color: var(--blush);
+  }
+
+  .help-card-text {
+    color: rgba(247, 242, 238, 0.7);
+    font-size: 0.9rem;
+    line-height: 1.8;
+  }
+
+  /* ---- Q&A ---- */
+  .qa-section {
+    background: var(--parchment);
+  }
+
+  .qa-intro {
+    margin-bottom: 3rem;
+  }
+
+  .qa-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 2px;
+    background: var(--blush);
+  }
+
+  .qa-item {
+    background: var(--ivory);
+    padding: 2rem 1.75rem;
+    transition: background 0.25s ease;
+  }
+
+  .qa-item:hover {
+    background: var(--white);
+  }
+
+  .qa-num {
+    color: var(--rosewood);
+    margin-bottom: 0.75rem;
+    display: block;
+  }
+
+  .qa-q {
+    font-family: var(--font-display);
+    font-size: 1.15rem;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+    color: var(--espresso);
+  }
+
+  .qa-a {
+    font-size: 0.9rem;
+    color: var(--warm-mid);
+  }
+
+  /* ---- RESPONSIVE ---- */
+  @media (max-width: 900px) {
+    .bio-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .bio-img-col {
+      max-width: 440px;
+      margin: 0 auto;
+    }
+
+    .help-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
